@@ -7,9 +7,9 @@
 .hero .english{color:#c0cdc5}
 .hero-rule{margin-top:94px}
 @media(max-width:800px){
-  .hero{padding-top:350px}
-  .hero::before{height:350px;background-position:right center;background-size:auto 350px}
-  .hero::after{height:350px;background:linear-gradient(0deg,#121716 0%,rgba(18,23,22,.15) 28%,transparent 75%)}
+  .hero{padding-top:48px}
+  .hero::before{height:auto;background-position:right 0 top 20px;background-size:auto clamp(280px,100vw,560px)}
+  .hero::after{height:auto;background:linear-gradient(90deg,rgba(18,23,22,.82),rgba(18,23,22,.48)),linear-gradient(0deg,#121716 0%,rgba(18,23,22,.72) 30%,transparent 80%)}
   .hero h1{margin-top:22px}
   .hero-rule{margin-top:44px}
 }
