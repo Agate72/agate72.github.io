@@ -1,0 +1,15 @@
+/* Entire globe stays inside the background image; no cover cropping. */
+.hero{position:relative;isolation:isolate;padding-top:100px}
+.hero::before{content:"";position:absolute;z-index:-2;inset:0;left:50%;width:100vw;transform:translateX(-50%);background:#121716 url("assets/voxel-earth.png") right center / auto 100% no-repeat}
+.hero::after{content:"";position:absolute;z-index:-1;inset:0;left:50%;width:100vw;transform:translateX(-50%);background:linear-gradient(90deg,#121716 2%,rgba(18,23,22,.94) 25%,rgba(18,23,22,.72) 48%,rgba(18,23,22,.12) 80%),linear-gradient(0deg,#121716 0%,transparent 20%)}
+.hero h1{text-shadow:0 2px 24px #121716}
+.hero-bottom{align-items:flex-start}
+.hero .english{color:#c0cdc5}
+.hero-rule{margin-top:94px}
+@media(max-width:800px){
+  .hero{padding-top:350px}
+  .hero::before{height:350px;background-position:right center;background-size:auto 350px}
+  .hero::after{height:350px;background:linear-gradient(0deg,#121716 0%,rgba(18,23,22,.15) 28%,transparent 75%)}
+  .hero h1{margin-top:22px}
+  .hero-rule{margin-top:44px}
+}
