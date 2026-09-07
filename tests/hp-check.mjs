@@ -49,6 +49,18 @@ try {
       assert.deepEqual(errors, []);
       assert.equal(await page.locator('body').evaluate(e => getComputedStyle(e).backgroundColor), 'rgb(18, 23, 22)');
       assert(await page.locator('.hero').evaluate(e => getComputedStyle(e, '::before').backgroundImage.includes('voxel-earth.png')));
+      assert(await page.locator('.hero').evaluate(async e => {
+        const css = getComputedStyle(e, '::before').backgroundImage;
+        const url = css.match(/url\(["']?(.*?)["']?\)/)?.[1];
+        if (!url) return false;
+        return new Promise(resolve => {
+          const img = new Image();
+          const timer = setTimeout(() => resolve(false), 5000);
+          img.onload = () => { clearTimeout(timer); resolve(img.naturalWidth > 0); };
+          img.onerror = () => { clearTimeout(timer); resolve(false); };
+          img.src = url;
+        });
+      }), 'Earth background must load');
     });
     await check(`${width}px: 横はみ出し`, async () => {
       const bad = await page.evaluate(() => [...document.querySelectorAll('h1,h2,h3,p,dd,nav,a:not(.skip)')].filter(e => {
