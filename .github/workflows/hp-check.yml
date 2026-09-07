@@ -1,0 +1,43 @@
+name: HP pre-PR checks
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: hp-check-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  hp-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          path: candidate
+          persist-credentials: false
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.base.sha || 'main' }}
+          path: baseline
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: candidate/package-lock.json
+      - run: npm ci
+        working-directory: candidate
+      - run: npx playwright install --with-deps chromium
+        working-directory: candidate
+      - run: npm test
+        working-directory: candidate
+        env:
+          HP_BASELINE_DIR: ${{ github.workspace }}/baseline
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hp-review-${{ github.run_id }}
+          path: candidate/test-results/
+          retention-days: 14
